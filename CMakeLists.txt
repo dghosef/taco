@@ -9,6 +9,87 @@ project(taco
   VERSION 0.1
   LANGUAGES C CXX
 )
+# specify the C++ compiler
+#
+SET(CMAKE_C_COMPILER /usr/local/bin/clang)
+SET(CMAKE_CXX_COMPILER /usr/local/bin/clang++)
+
+# specify the C++ standard
+#
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBUILD_FLAVOR=RELEASE -DTESTBUILD -DNDEBUG -O3 -g ")
+SET(GENERATED_FILES_DIR "${PROJECT_SOURCE_DIR}/__generated__/release/generated")
+
+# add -pthread
+# 
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread -Wno-unused-command-line-argument")
+
+# -rdynamic so symbols are exposed to generated code
+# fPIC because the thing told me too
+# 
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -rdynamic ")
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fPIC ")
+
+## If debug symbols are emitted, redirect them to point at the right location
+## The reference to source code files always have prefix ../../ (since we are building 
+## in directory build/flavor/), remove this prefix
+##
+#if((BUILD_FLAVOR STREQUAL "DEBUG") OR (BUILD_FLAVOR STREQUAL "RELEASE"))
+#  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffile-prefix-map=../../= ")
+#endif()
+
+# gtest header
+#
+include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/pochi_libs_and_includes//include/gtest/include")
+
+# llvm-specific flags
+#
+SET(LLVM_EXTRA_COMPILE_FLAGS "-I/usr/local/include -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS ")
+execute_process(
+  COMMAND bash "-c" "llvm-config --ldflags"
+  OUTPUT_VARIABLE LLVM_EXTRA_LINK_FLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# TODO: only append llvm-specific flags when needed
+# Really hacky
+#
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${LLVM_EXTRA_COMPILE_FLAGS} ")
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${LLVM_EXTRA_LINK_FLAGS} ")
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN/shared_libs' -L${PROJECT_SOURCE_DIR}/pochi_libs_and_includes/lib")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${CMAKE_EXE_LINKER_FLAGS} ")
+
+# Get the llvm-specific link libraries
+# There are two parts: 
+# (1) the LLVM libraries (which are outputted in absolute paths)
+#
+execute_process(
+  COMMAND bash "-c" "llvm-config --libfiles"
+  OUTPUT_VARIABLE _tmp
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+string(REPLACE " " ";" LLVM_EXTRA_LINK_LIBRARIES ${_tmp})
+
+# (2) the system libraries. They are outputted in forms like "-lfoo -lbar". 
+# We transform the output to format "foo bar", and append to LLVM_EXTRA_LINK_LIBRARIES
+#
+execute_process(
+  COMMAND bash "-c" "llvm-config --system-libs"
+  OUTPUT_VARIABLE _tmp
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+string(REPLACE " " ";" _tmp ${_tmp})
+foreach(_loop_var ${_tmp})
+  STRING(REGEX REPLACE "^-l" "" _libname ${_loop_var})
+  LIST(APPEND LLVM_EXTRA_LINK_LIBRARIES ${_libname})
+endforeach()
+
+include_directories("${PROJECT_SOURCE_DIR}/pochi_libs_and_includes/include")
+include_directories("${PROJECT_SOURCE_DIR}/pochi_libs_and_includes/include/pochivm")
+
+
 option(CUDA "Build for NVIDIA GPU (CUDA must be preinstalled)" OFF)
 option(PYTHON "Build TACO for python environment" OFF)
 option(OPENMP "Build with OpenMP execution support" OFF)
@@ -74,7 +155,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(CMAKE_MACOSX_RPATH 1)
 endif()
 
-option(TACO_SHARED_LIBRARY "Build as a shared library" ON)
+option(TACO_SHARED_LIBRARY "Build as a shared library" OFF)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -99,7 +180,6 @@ endif(COVERAGE)
 
 set(C_CXX_FLAGS "${C_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "${C_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS "${C_CXX_FLAGS} -std=c++14")
 
 set(TACO_PROJECT_DIR ${CMAKE_CURRENT_LIST_DIR})
 

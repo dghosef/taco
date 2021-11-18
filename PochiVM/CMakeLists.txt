@@ -138,29 +138,29 @@ add_subdirectory(mini_db_backend)
 
 # add the executable
 #
-add_executable(main
-  main.cpp                 
-  test_sanity_arith_expr.cpp      
-  test_sanity_llvm_optimization.cpp
-  test_error_cases.cpp     
-  test_sanity_break_continue.cpp  
-  test_sanity_logical_op.cpp
-  test_fibonacci.cpp       
-  test_sanity_deref.cpp           
-  test_sanity_typecasts.cpp
-  test_find_nth_prime.cpp  
-  test_sanity_irdump.cpp
-  test_sanity_bitcode.cpp
-  test_call_cpp_func.cpp
-  test_catch_throw.cpp
-  test_metavar_framework.cpp
-  test_fast_interp_internals.cpp
-  test_fast_interp.cpp
-  test_paper_microbenchmarks.cpp
-  test_sanity_pointer_arithmetic.cpp
-  test_mini_db_backend_unit_test.cpp
-  test_generated_function_pointer.cpp
-)
+ add_executable(main
+   main.cpp                 
+   # test_sanity_arith_expr.cpp      
+   # test_sanity_llvm_optimization.cpp
+   # test_error_cases.cpp     
+   # test_sanity_break_continue.cpp  
+   # test_sanity_logical_op.cpp
+   # test_fibonacci.cpp       
+   # test_sanity_deref.cpp           
+   # test_sanity_typecasts.cpp
+   # test_find_nth_prime.cpp  
+   # test_sanity_irdump.cpp
+   # test_sanity_bitcode.cpp
+   # test_call_cpp_func.cpp
+   # test_catch_throw.cpp
+   # test_metavar_framework.cpp
+   # test_fast_interp_internals.cpp
+   # test_fast_interp.cpp
+   # test_paper_microbenchmarks.cpp
+   # test_sanity_pointer_arithmetic.cpp
+   # test_mini_db_backend_unit_test.cpp
+   # test_generated_function_pointer.cpp
+ )
 
 # Important to link runtime using '--whole-archive'
 # Symbols in runtime library, even if unused by main program, 

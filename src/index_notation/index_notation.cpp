@@ -2012,9 +2012,11 @@ template <> SuchThat to<SuchThat>(IndexStmt s) {
 }
 
 // class IndexVar
-IndexVar::IndexVar() : IndexVar(util::uniqueName('i')) {}
+IndexVar::IndexVar() : IndexVar(util::uniqueName('i')) {
+}
 
 IndexVar::IndexVar(const std::string& name) : content(new Content) {
+
   content->name = name;
 }
 

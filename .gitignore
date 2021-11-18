@@ -8,6 +8,10 @@ lib/
 *Makefile
 *CMakeFiles/
 *cmake_install.cmake
+.ccls-cache/
+.ninja*
+*.ninja
+generated/
 CMakeCache.txt
 doc
 

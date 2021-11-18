@@ -7,6 +7,8 @@
 
 #include "taco/ir/ir_visitor.h"
 #include "codegen_c.h"
+#include "pochivm.h"
+#include "test_util_helper.h"
 #include "taco/error.h"
 #include "taco/util/strings.h"
 #include "taco/util/collections.h"
@@ -239,6 +241,7 @@ protected:
   }
 };
 
+using namespace PochiVM;
 CodeGen_C::CodeGen_C(std::ostream &dest, OutputKind outputKind, bool simplify)
     : CodeGen(dest, false, simplify, C), out(dest), outputKind(outputKind) {}
 
