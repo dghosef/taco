@@ -38,6 +38,7 @@
 #include "taco/util/timers.h"
 #include "taco/util/name_generator.h"
 
+#include "codegen/codegen_pochi.h"
 #include "codegen/codegen_c.h"
 #include "codegen/codegen_cuda.h"
 #include "error/error_checks.h"
@@ -894,6 +895,11 @@ void TensorBase::compileSource(std::string source) {
     CodeGen_CUDA::generateShim(content->assembleFunc, ss);
     ss << endl;
     CodeGen_CUDA::generateShim(content->computeFunc, ss);
+  }
+  else if (should_use_pochi_codegen("assemble") && should_use_pochi_codegen("compute")) {
+    CodeGen_Pochi::generateShim(content->assembleFunc, ss);
+    ss << endl;
+    CodeGen_Pochi::generateShim(content->computeFunc, ss);
   }
   else {
     CodeGen_C::generateShim(content->assembleFunc, ss);

@@ -239,6 +239,38 @@ static void RegisterRuntimeLibrary()
     RegisterMemberObject<&std::pair<const uintptr_t, uintptr_t>::second>();
 
     RegisterConstructor<std::vector<uintptr_t>, size_t>();
+
+    /*************************************************************************
+     * Taco registrations
+     *************************************************************************/
+    RegisterConstructor<taco_tensor_t>();
+    RegisterMemberObject<&taco_tensor_t::vals>();
+    RegisterMemberObject<&taco_tensor_t::vals_size>();
+    RegisterMemberObject<&taco_tensor_t::dimensions>();
+    RegisterMemberObject<&taco_tensor_t::indices>();
+    RegisterConstructor<std::complex<float>>();
+    RegisterConstructor<std::complex<double>>();
+    RegisterConstructor<std::complex<long double>>();
+    RegisterFreeFn<&omp_get_thread_num>();
+    RegisterFreeFn<&omp_get_max_threads>();
+    RegisterFreeFn<&cmp>();
+    RegisterFreeFn<&taco_binarySearchAfter>();
+    RegisterFreeFn<&taco_binarySearchBefore>();
+    RegisterFreeFn<&init_taco_tensor_t>();
+    RegisterFreeFn<&deinit_taco_tensor_t>();
+    RegisterFreeFn<&pochi_calloc>();
+    RegisterFreeFn<&pochi_malloc>();
+    RegisterFreeFn<&pochi_realloc>();
+    RegisterFreeFn<&pochi_free>();
+    RegisterFreeFn<&pochi_qsort>();
+    RegisterFreeFn<&pochi_bitand>();
+    RegisterFreeFn<&pochi_bitor>();
+
+    // Taco Math Registrations
+    RegisterFreeFn<&sqrt_double>();
+    RegisterFreeFn<&min>();
+    RegisterFreeFn<&max>();
+    #include "taco_register.h"
 }
 
 // DO NOT MODIFY
@@ -249,3 +281,4 @@ void __pochivm_register_runtime_library__()
 {
     RegisterRuntimeLibrary();
 }
+

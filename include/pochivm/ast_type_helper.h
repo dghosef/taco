@@ -1233,8 +1233,14 @@ inline bool TypeId::MayStaticCastTo(TypeId other) const
     assert(!IsInvalid());
     using FnProto = bool(*)();
     FnProto fn = reinterpret_cast<FnProto>(
-                AstTypeHelper::internal::may_static_cast_selector(*this, other));
-    return fn();
+    AstTypeHelper::internal::may_static_cast_selector(*this, other));
+    if(!fn())
+    {
+        std::cout << "could not cast to " << other.Print() << " from " << Print() << std::endl;
+        return false;
+    } else {
+        return true;
+    }
 }
 
 inline bool TypeId::MayReinterpretCastTo(TypeId other) const

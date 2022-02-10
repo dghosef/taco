@@ -13,6 +13,7 @@ RUN tar xf llvm.tar.xz
 RUN cp -r clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local/
 RUN rm -rf clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04
 RUN rm -f llvm.tar.xz
+RUN apt install -y lldb
 
 # set user
 #

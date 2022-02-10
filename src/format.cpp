@@ -15,7 +15,6 @@ bool g_is_update_expected_mode = false;
 #include "taco/util/strings.h"
 
 using namespace std;
-using namespace PochiVM;
 namespace taco {
 
 // class Format
@@ -27,7 +26,6 @@ Format::Format(const ModeFormat modeFormat) : modeFormatPacks({modeFormat}),
 
 Format::Format(const std::initializer_list<ModeFormatPack>& modeFormatPacks)
     : modeFormatPacks(modeFormatPacks) {
-  test_pochi();
   taco_uassert(getOrder() <= INT_MAX) << "Supports only INT_MAX modes";
   
   modeOrdering.resize(getOrder());

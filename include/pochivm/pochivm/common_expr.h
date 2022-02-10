@@ -227,7 +227,11 @@ public:
         , m_fiInlineShape(FIShape::INVALID), m_dst(dst), m_src(src)
     {
         TestAssert(m_src->GetTypeId().IsPrimitiveType() || m_src->GetTypeId().IsPointerType());
-        TestAssert(m_dst->GetTypeId() == m_src->GetTypeId().AddPointer());
+        if(m_dst->GetTypeId() != m_src->GetTypeId().AddPointer()) {
+            std::cout << m_dst->GetTypeId().Print() << std::endl;
+            std::cout << m_src->GetTypeId().Print() << std::endl;
+            TestAssert(m_dst->GetTypeId() == m_src->GetTypeId().AddPointer());
+        }
     }
 
     TypeId GetValueType() const

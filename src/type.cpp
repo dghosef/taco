@@ -106,7 +106,7 @@ int Datatype::getNumBits() const {
       return 128;
     default:
       taco_ierror << "Bits for data type not set: " << getKind();
-      return -1;
+    return -1;
   }
 }
 

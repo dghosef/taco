@@ -16,3 +16,4 @@
 #include "common.h"
 #include "test_classes.h"
 #include "test_fn_stress.h"
+#include "taco_helpers.h"

@@ -4,6 +4,7 @@ SET(SOURCES
   test_classes.cpp
   test_classes_2.cpp
   test_fn_stress.cpp
+  taco_helpers.cpp
 )
 
 # !!! DO NOT MODIFY BELOW !!! 

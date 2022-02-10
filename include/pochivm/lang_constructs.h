@@ -222,6 +222,7 @@ public:
         m_elseClause = elseClause;
     }
 
+    AstScope* GetCondClause() const { return m_condClause; }
     AstScope* GetThenClause() const { return m_thenClause; }
     AstScope* GetElseClause() const { return m_elseClause; }
 

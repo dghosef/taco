@@ -26,7 +26,6 @@ static void RegisterRuntimeLibrary()
     //      (which does not require knowledge of its implementation). But 'f()' will give you a segfault.
     //
     // ****************************************
-
     RegisterMemberFn<&TestClassA::GetY>();
     RegisterMemberFn<&TestClassA::SetY>();
     RegisterMemberFn<&TestClassA::GetXPlusY>();
@@ -212,15 +211,6 @@ static void RegisterRuntimeLibrary()
     RegisterOutlineIncrementOrDecrementOperator<std::vector<std::string>::iterator, true /*isIncrement*/>();
     RegisterOutlineIncrementOrDecrementOperator<std::vector<std::string>::iterator, false /*isIncrement*/>();
 
-    RegisterFreeFn<&MiniDbBackend::GetCustomerTable>();
-    RegisterFreeFn<&MiniDbBackend::GetLineitemTable>();
-    RegisterFreeFn<&MiniDbBackend::GetNationTable>();
-    RegisterFreeFn<&MiniDbBackend::GetOrdersTable>();
-    RegisterFreeFn<&MiniDbBackend::GetPartTable>();
-    RegisterFreeFn<&MiniDbBackend::GetPartSuppTable>();
-    RegisterFreeFn<&MiniDbBackend::GetRegionTable>();
-    RegisterFreeFn<&MiniDbBackend::GetSupplierTable>();
-    RegisterFreeFn<&MiniDbBackend::GetTestTable1>();
     RegisterConstructor<std::vector<uintptr_t>>();
 
     RegisterMemberFn<static_cast<std::vector<uintptr_t>::iterator(std::vector<uintptr_t>::*)()>(&std::vector<uintptr_t>::begin)>();
@@ -242,41 +232,45 @@ static void RegisterRuntimeLibrary()
     RegisterMemberFn<&std::vector<uintptr_t>::size>();
     RegisterMemberFn<static_cast<void(std::vector<uintptr_t>::*)(const uintptr_t&)>(&std::vector<uintptr_t>::push_back)>();
 
-    RegisterMemberFn<&MiniDbBackend::SqlResultPrinter::PrintInt32>();
-    RegisterMemberFn<&MiniDbBackend::SqlResultPrinter::PrintInt64>();
-    RegisterMemberFn<&MiniDbBackend::SqlResultPrinter::PrintUInt32>();
-    RegisterMemberFn<&MiniDbBackend::SqlResultPrinter::PrintUInt64>();
-    RegisterMemberFn<&MiniDbBackend::SqlResultPrinter::PrintDouble>();
-    RegisterMemberFn<&MiniDbBackend::SqlResultPrinter::PrintString>();
-    RegisterMemberFn<&MiniDbBackend::SqlResultPrinter::PrintNewLine>();
-
-    RegisterConstructor<MiniDbBackend::QueryExecutionTempAllocator>();
-    RegisterMemberFn<&MiniDbBackend::QueryExecutionTempAllocator::Allocate>();
-    RegisterMemberFn<&MiniDbBackend::QueryExecutionTempAllocator::Reset>();
-
     RegisterConstructor<TestGeneratedFnPtr, uintptr_t>();
     RegisterMemberFn<&TestGeneratedFnPtr::execute>();
 
-    RegisterFreeFn<&MiniDbBackend::CreateQEHashTable>();
-    RegisterMemberFn<static_cast<uintptr_t&(MiniDbBackend::QEHashTable::*)(const uintptr_t&)>(&MiniDbBackend::QEHashTable::operator[])>();
-    RegisterFreeFn<&MiniDbBackend::HashString>();
-    RegisterFreeFn<&MiniDbBackend::CompareStringEqual>();
-    RegisterFreeFn<&MiniDbBackend::CompareString>();
-    RegisterMemberFn<static_cast<MiniDbBackend::QEHashTable::iterator(MiniDbBackend::QEHashTable::*)()>(&MiniDbBackend::QEHashTable::begin)>();
-    RegisterMemberFn<static_cast<MiniDbBackend::QEHashTable::iterator(MiniDbBackend::QEHashTable::*)()>(&MiniDbBackend::QEHashTable::end)>();
-    RegisterMemberFn<&MiniDbBackend::QEHashTable::iterator::operator*>();
-    RegisterMemberFn<&MiniDbBackend::QEHashTable::iterator::operator->>();
-
-    RegisterOutlineDefinedOverloadedOperator<MiniDbBackend::QEHashTable::iterator, MiniDbBackend::QEHashTable::iterator, AstComparisonExprType::EQUAL>();
-    RegisterOutlineDefinedOverloadedOperator<MiniDbBackend::QEHashTable::iterator, MiniDbBackend::QEHashTable::iterator, AstComparisonExprType::NOT_EQUAL>();
-
-    RegisterOutlineIncrementOrDecrementOperator<MiniDbBackend::QEHashTable::iterator, true /*isIncrement*/>();
     RegisterMemberObject<&std::pair<const uintptr_t, uintptr_t>::first>();
     RegisterMemberObject<&std::pair<const uintptr_t, uintptr_t>::second>();
 
-    RegisterFreeFn<&MiniDbBackend::SortRows>();
-    RegisterFreeFn<&MiniDbBackend::DumpHashTable>();
     RegisterConstructor<std::vector<uintptr_t>, size_t>();
+
+    /*************************************************************************
+     * Taco registrations
+     *************************************************************************/
+    RegisterConstructor<taco_tensor_t>();
+    RegisterMemberObject<&taco_tensor_t::vals>();
+    RegisterMemberObject<&taco_tensor_t::vals_size>();
+    RegisterMemberObject<&taco_tensor_t::dimensions>();
+    RegisterMemberObject<&taco_tensor_t::indices>();
+    RegisterConstructor<std::complex<float>>();
+    RegisterConstructor<std::complex<double>>();
+    RegisterConstructor<std::complex<long double>>();
+    RegisterFreeFn<&omp_get_thread_num>();
+    RegisterFreeFn<&omp_get_max_threads>();
+    RegisterFreeFn<&cmp>();
+    RegisterFreeFn<&taco_binarySearchAfter>();
+    RegisterFreeFn<&taco_binarySearchBefore>();
+    RegisterFreeFn<&init_taco_tensor_t>();
+    RegisterFreeFn<&deinit_taco_tensor_t>();
+    RegisterFreeFn<&pochi_calloc>();
+    RegisterFreeFn<&pochi_malloc>();
+    RegisterFreeFn<&pochi_realloc>();
+    RegisterFreeFn<&pochi_free>();
+    RegisterFreeFn<&pochi_qsort>();
+    RegisterFreeFn<&pochi_bitand>();
+    RegisterFreeFn<&pochi_bitor>();
+
+    // Taco Math Registrations
+    RegisterFreeFn<&sqrt_double>();
+    RegisterFreeFn<&min>();
+    RegisterFreeFn<&max>();
+    #include "taco_register.h"
 }
 
 // DO NOT MODIFY
@@ -287,3 +281,4 @@ void __pochivm_register_runtime_library__()
 {
     RegisterRuntimeLibrary();
 }
+

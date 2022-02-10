@@ -166,7 +166,30 @@ inline Value<bool> CreateComparisonExpr(const ValueVT& lhs, const ValueVT& rhs, 
 
 inline Value<void> Assign(const ReferenceVT& lhs, const ValueVT& rhs)
 {
-    return Value<void>(new AstAssignExpr(lhs.__pochivm_ref_ptr, rhs.__pochivm_value_ptr));
+  if (lhs.__pochivm_value_ptr->GetTypeId() ==
+      rhs.__pochivm_value_ptr->GetTypeId()) {
+    return Value<void>(
+        new AstAssignExpr(lhs.__pochivm_ref_ptr, rhs.__pochivm_value_ptr));
+  }
+  // Implicit conversion
+  if (rhs.__pochivm_value_ptr->GetTypeId().MayStaticCastTo(
+          lhs.__pochivm_value_ptr->GetTypeId())) {
+    auto casted_rhs = new PochiVM::AstStaticCastExpr(
+        rhs.__pochivm_value_ptr, lhs.__pochivm_value_ptr->GetTypeId());
+    return Value<void>(new AstAssignExpr(lhs.__pochivm_ref_ptr, casted_rhs));
+  }
+  // Only implicitly convert pointers if they have the same pointer count
+  if (lhs.__pochivm_value_ptr->GetTypeId().NumLayersOfPointers() ==
+          rhs.__pochivm_value_ptr->GetTypeId().NumLayersOfPointers() &&
+      lhs.__pochivm_value_ptr->GetTypeId().MayReinterpretCastTo(
+          rhs.__pochivm_value_ptr->GetTypeId())) {
+    auto casted_rhs = new PochiVM::AstReinterpretCastExpr(
+        rhs.__pochivm_value_ptr, lhs.__pochivm_ref_ptr->GetTypeId());
+    return Value<void>(new AstAssignExpr(lhs.__pochivm_ref_ptr, casted_rhs));
+  }
+  throw std::runtime_error("Cannot assign " +
+                           lhs.__pochivm_value_ptr->GetTypeId().Print() +
+                           " to " +
+                           rhs.__pochivm_value_ptr->GetTypeId().Print());
 }
-
 }   // namespace PochiVM

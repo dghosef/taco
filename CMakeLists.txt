@@ -19,7 +19,7 @@ SET(CMAKE_CXX_COMPILER /usr/local/bin/clang++)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBUILD_FLAVOR=RELEASE -DTESTBUILD -DNDEBUG -O3 -g ")
+SET(CMAKE_CXX_FLAGS "-ferror-limit=1 ${CMAKE_CXX_FLAGS} -DBUILD_FLAVOR=RELEASE -DTESTBUILD -DNDEBUG -O0 -g ")
 SET(GENERATED_FILES_DIR "${PROJECT_SOURCE_DIR}/__generated__/release/generated")
 
 # add -pthread
@@ -163,7 +163,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-set(OPTIMIZE "-O3" CACHE STRING "Optimization level")
+set(OPTIMIZE "-O0" CACHE STRING "Optimization level")
 set(C_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wmissing-declarations -Woverloaded-virtual -pedantic-errors -Wno-deprecated")
 if(OPENMP)
   set(C_CXX_FLAGS "-fopenmp ${C_CXX_FLAGS}")

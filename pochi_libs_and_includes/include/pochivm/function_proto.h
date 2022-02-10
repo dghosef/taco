@@ -796,7 +796,7 @@ public:
     {
         m_interpFunction->DebugInterp(m_params.data(), out);
     }
-
+    std::string GetFnName() const { return m_fnName; }
     void InterpImplCppFunction(void* out)
     {
         size_t numParams = m_cppFunctionMd->m_numParams;

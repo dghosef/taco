@@ -1,0 +1,2 @@
+python gen_callables.py
+./compile_pochi && ./compile_taco

@@ -7,6 +7,7 @@
 #include <utility>
 #include <random>
 
+#include "pochivm/pochivm_function_pointer.h"
 #include "taco/target.h"
 #include "taco/ir/ir.h"
 
@@ -15,6 +16,8 @@ namespace ir {
 
 class Module {
 public:
+using FnPrototype = int (*)(void **);
+  std::map<std::string, PochiVM::FastInterpFunction<FnPrototype>> fns;
   /// Create a module for some target
   Module(Target target=getTargetFromEnvironment())
     : lib_handle(nullptr), moduleFromUserSource(false), target(target) {
@@ -28,6 +31,9 @@ public:
   /// Compile the module into a source file located at the specified location
   /// path and prefix.  The generated source will be path/prefix.{.c|.bc, .h}
   void compileToSource(std::string path, std::string prefix);
+
+  /// Compile the module using pochivm
+  void compilePochi();
   
   /// Compile the module into a static library located at the specified location
   /// path and prefix.  The generated library will be path/prefix.a

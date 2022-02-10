@@ -4,7 +4,7 @@
 // This file contains version/config info, gathered at cmake config time.
 
 #define TACO_BUILD_TYPE "Debug"
-#define TACO_BUILD_DATE "2021-11-18"
+#define TACO_BUILD_DATE "2022-02-10"
 
 #define TACO_BUILD_COMPILER_ID      "GNU"
 #define TACO_BUILD_COMPILER_VERSION "7.5.0"
@@ -15,7 +15,7 @@
 // if taco starts using a tweak number, add  here
 
 // For non-git builds, this will be an empty string.
-#define TACO_VERSION_GIT_SHORTHASH "a223e8fe"
+#define TACO_VERSION_GIT_SHORTHASH "fb52b095"
 
 #define TACO_FEATURE_OPENMP 0
 #define TACO_FEATURE_PYTHON 0
